@@ -175,7 +175,7 @@
                 }
                 return flag
             },
-            // 循环树数据
+            // 循环树数据，用于判断
             handleForTree (dataArr, row) {
                 for (let i=0; i<dataArr.length; i++) {
                     let item = dataArr[i]
