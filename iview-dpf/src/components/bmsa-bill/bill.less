@@ -1,0 +1,260 @@
+.bill-wrapper{
+  height: 100%;
+  margin-right: -12px;
+  .bill-in{
+    height: 100%;
+  }
+  .bill-header {
+    position: relative;
+    text-align: left;
+    height: 48px;
+    background: transparent;
+    line-height: 48px;
+    padding-right: 0;
+    .ivu-btn {
+      margin-right: 8px;
+    }
+  }
+  .ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
+    background: transparent!important;
+  }
+  .bill-container{
+     height: 100%;
+        .content {
+            // 明细内容
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      float: left;
+      padding-right: 12px;
+      .ivu-tabs {
+        margin-top: -53px;
+        z-index: 1;
+        .ivu-tabs-bar { // 明细下的tab
+          border-bottom: none;
+          width: calc(~"100% - 100px");
+          .ivu-tabs-nav {
+            width: 100%;
+            display: flex;
+            .ivu-tabs-tab {
+              text-align: center;
+              flex: 1;
+            }
+          }
+        }
+      }
+      .ivu-card{
+        margin-top:0;
+        margin-bottom: 10px;
+        >.ivu-card-body{
+           padding-top: 10px;
+           padding-bottom: 0;
+        }
+      }
+
+    }
+    .ivu-menu-right .ivu-menu-light:after {
+      display: none!important;
+    }
+    .ivu-menu-horizontal.ivu-menu-light:after {
+      display: none;
+    }
+    .n-scrollbar { // 是否带滚动
+      .ivu-card {
+        height: calc(~"100% - 16px");
+        .ivu-card-body {
+          height: calc(~"100% - 52px");
+          .ivu-tabs {
+            height: calc(~"100% + 53px");
+            .ivu-tabs-content {
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .ivu-card-head {
+      button, .bill-toolbar-select {
+          position: absolute;
+          top: 10px;
+          right: 16px;
+      }
+      button.collapsed-btn {
+          right: 55px;
+      }
+
+      .bill-toolbar-select {
+          right: 96px;
+      }
+    }
+  /*左侧/右侧样式*/
+  .bill-right, .bill-left {
+    position: relative;
+    .bill-new-menu-svg {
+      position: absolute;
+      top: 10px;
+      left: 6px;
+    }
+    .bill-item-right, .bill-item-left {
+      border-radius: 4px;
+      margin-top:0;
+      margin-bottom: 0;
+      position: relative;
+      width: 130px;
+      border:0;
+      background-color: transparent;
+      .ivu-menu-item {
+        padding: 10px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        >i{
+          margin-right:3px!important;
+        }
+        &:after{
+          content: "";
+          width:12px;
+          height: 12px;
+          border-radius: 50%;
+          position: absolute;
+          top:15px;
+          right:5px;
+          border: 1px solid #c5c5c5;
+          background:#f7f7f7;
+          z-index: 2;
+        }
+      }
+      .ivu-menu-item-selected{
+        background: transparent!important;
+        &:after{
+          background:#f7f7f7!important;
+        }
+      }
+    }
+    .ivu-menu:after{
+      right: 10px;
+      z-index: 0;
+    }
+  }
+  .bill-right { // 单据右侧
+    .ivu-right {
+      position: absolute;
+      right: 20px !important;
+      top: 10px;
+      z-index: 1;
+    }
+    .content-card{
+      float: left;
+      width: calc(~"100% - 150px");
+    }
+    .ivu-menu-item{
+      position: relative;
+      padding-left: 15px;
+      i,div{
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        top:14px;
+        left:0;
+      }
+      span{
+        font-size: 12px;
+        width: 92px;
+        height:24px;
+        line-height: 20px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: 16px;
+      }
+    }
+  }
+  .bill-left { // 单据左侧
+    .ivu-left {
+      position: absolute;
+      left: 0 !important;
+      top: 10px;
+    }
+    .content-card{
+      float: right;
+      width: calc(~"100% - 145px");
+    }
+    .ivu-menu-item{
+      padding-left: 25px!important;
+      &:after{
+        left:5px;
+      }
+    }
+    .ivu-menu:after{
+      left: 10px;
+      z-index: 0;
+    }
+  }
+  .bill-drop-menu-context { // tab布局的下拉
+    .choice-wrapper .ivu-checkbox-wrapper {
+      display: block!important;
+      margin-top: 6px;
+    }
+    .choice-wrapper {
+      max-height: none;
+    }
+  }
+  .bill-tag-right{
+    position: absolute;
+    top:0;
+    right:20px;
+  }
+  .bill-new-menu-svg{
+    display: none;
+  }
+  // setting
+  .bill-setting{
+     position: absolute;
+     right: 3px;
+     display: inline-block;
+     width: 50px;
+     height: 48px;
+     line-height: 48px;
+     text-align: center;
+    .ivu-select{
+      position: absolute;
+      top:12px;
+      right:12px;
+      width: 32px;
+      height:32px;
+      .ivu-select-selection{
+        opacity: 0;
+            div {
+                    display: none;
+                }
+      }
+    }
+    .ivu-select-dropdown-list{
+      max-width: 200px;
+    }
+    .ivu-select-item{
+      text-align: left;
+      padding-right: 28px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  //scroll
+  .ivu-scroll-wrapper, .ivu-scroll-container{
+    height: 100%;
+  }
+  //全屏
+  .card-full .ivu-card-body{
+    height: calc(~'100% - 60px');
+    > .bill-wrapper-context-body{
+      height:100%;
+      > div{
+        height:100% !important
+      }
+    }
+  }
+}
