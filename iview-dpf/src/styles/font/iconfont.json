@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11855587",
+      "name": "信号 - 无",
+      "font_class": "xinhao-wu",
+      "unicode": "e718",
+      "unicode_decimal": 59160
+    },
+    {
+      "icon_id": "9654170",
+      "name": "上线",
+      "font_class": "shangxian",
+      "unicode": "e714",
+      "unicode_decimal": 59156
+    },
+    {
+      "icon_id": "9654171",
+      "name": "下线",
+      "font_class": "xiaxian",
+      "unicode": "e715",
+      "unicode_decimal": 59157
+    },
+    {
+      "icon_id": "17544309",
+      "name": "计数器",
+      "font_class": "jishuqi1",
+      "unicode": "e716",
+      "unicode_decimal": 59158
+    },
+    {
+      "icon_id": "3122225",
+      "name": "二级-资源总览",
+      "font_class": "erji-ziyuanzonglan",
+      "unicode": "eabd",
+      "unicode_decimal": 60093
+    },
+    {
+      "icon_id": "21394313",
+      "name": "地图",
+      "font_class": "ditu",
+      "unicode": "f4d8",
+      "unicode_decimal": 62680
+    },
+    {
+      "icon_id": "2491265",
+      "name": "语音播报",
+      "font_class": "yuyinbobao",
+      "unicode": "e713",
+      "unicode_decimal": 59155
+    },
+    {
+      "icon_id": "1459152",
+      "name": "生产总览-pressed",
+      "font_class": "shengchanzonglan-pressed",
+      "unicode": "e711",
+      "unicode_decimal": 59153
+    },
+    {
+      "icon_id": "11881494",
+      "name": "车间",
+      "font_class": "chejian",
+      "unicode": "e712",
+      "unicode_decimal": 59154
+    },
+    {
       "icon_id": "14094464",
       "name": "user-girl",
       "font_class": "user-girl-copy",

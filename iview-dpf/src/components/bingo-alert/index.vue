@@ -1,44 +1,44 @@
 <template>
-  <div>
-    <bingo-modal ref="alert" v-model="show" width="460" onlyBody v-if="type=='info'">
-      <div class="bingo-alert-content">
-        <div class="bingo-alert-icon bingo-alert-warning">?</div>
-        <div class="bingo-alert-title">{{title}}</div>
-        <div class="bingo-alert-content">{{content}}</div>
-      </div>
-      <div slot="footer" class="bingo-alert-button">
-        <button type="button" class="cannel ivu-btn ivu-btn-default ivu-btn-long" @click="onCanel">
-          <span>{{canelName}}</span>
-        </button>
-        <button type="button" class="ivu-btn ivu-btn-warning" @click="onOk">
-          <i class="ivu-load-loop ivu-icon ivu-icon-ios-loading" v-if="loading"></i>
-          <span>
+    <div>
+        <bingo-modal ref="alert" v-model="show" width="460" onlyBody v-if="type=='info'">
+            <div class="bingo-alert-content">
+                <div class="bingo-alert-icon bingo-alert-warning">?</div>
+                <div class="bingo-alert-title">{{title}}</div>
+                <div class="bingo-alert-content">{{content}}</div>
+            </div>
+            <div slot="footer" class="bingo-alert-button">
+                <button type="button" class="cannel ivu-btn ivu-btn-default ivu-btn-long" @click="onCanel">
+                    <span>{{canelName}}</span>
+                </button>
+                <button type="button" class="ivu-btn ivu-btn-warning" @click="onOk">
+                    <i class="ivu-load-loop ivu-icon ivu-icon-ios-loading" v-if="loading"></i>
+                    <span>
                         <span>（<span>{{duration}}</span>s后）</span>{{okName}}
                     </span>
-        </button>
-      </div>
-    </bingo-modal>
-    <bingo-modal ref="alert" v-model="show" width="460" onlyBody v-if="type=='error'" footer-hide>
-      <div class="ivu-result">
-        <div class="ivu-result-icon ivu-result-icon-error"><!---->
-          <i class="ivu-icon ivu-icon-ios-close"></i>
-        </div>
-        <div class="ivu-result-title">{{title}}</div>
-        <div class="ivu-result-desc">
-          <div>{{content}}</div>
-        </div>
-        <div class="ivu-result-extra" v-if="showBody">
-          <div style="font-size: 14px;">
-            <div>{{bodyTitle}}</div>
-            <div v-for="(item, key) in bodyList" :key="key">
-              <i class="ivu-icon ivu-icon-ios-close-circle-outline" style="color: rgb(237, 64, 20);"></i>
-              {{item}}
+                </button>
             </div>
-          </div>
-        </div> <!---->
-      </div>
-    </bingo-modal>
-  </div>
+        </bingo-modal>
+        <bingo-modal ref="alert" v-model="show" width="460" :height="setHeight ? '185' : ''" onlyBody v-if="type=='error'" footer-hide>
+            <div class="ivu-result">
+                <div class="ivu-result-icon ivu-result-icon-error"><!---->
+                    <span :class="'icon iconfont ' + icon"></span>
+                </div>
+                <div class="ivu-result-title">{{title}}</div>
+                <div class="ivu-result-desc">
+                    <div>{{content}}</div>
+                </div>
+                <div class="ivu-result-extra" v-if="!hideBody">
+                    <div style="font-size: 14px;">
+                        <div>{{bodyTitle}}</div>
+                        <div v-for="(item, key) in bodyList" :key="key">
+                            <i class="ivu-icon ivu-icon-ios-close-circle-outline" style="color: rgb(237, 64, 20);"></i>
+                            {{item}}
+                        </div>
+                    </div>
+                </div> <!---->
+            </div>
+        </bingo-modal>
+    </div>
 </template>
 <script>
     import bingoModal from '@/components/bingo-modal';
@@ -53,9 +53,11 @@
                 content:'',
                 duration: 3, // 倒计时
                 loading: false,
+                setHeight: false, // 显示固定高度
                 show: false, // 是否显示弹窗
                 hideTime: false, //显示计数器
-                showBody: true,
+                hideBody: false,
+                icon: '',
                 bodyTitle: '',
                 bodyList: [],
                 canelName: '取消',
@@ -115,13 +117,19 @@
         }
     }
 </script>
-<style lang="less">
-  .ivu-result {
-    width: 100%;
-  }
-  .ivu-result-extra {
-    padding: 16px 30px!important;
-    max-height: 140px!important;
-    overflow: auto!important;
-  }
+<style lang="less" scoped>
+    .ivu-result {
+        width: 100%;
+    }
+    .ivu-result-extra {
+        padding: 16px 30px!important;
+        max-height: 140px!important;
+        overflow: auto!important;
+    }
+    .ivu-result-icon-error {
+        height: 72px;
+        .iconxinhao-wu, .iconguanbi {
+            font-size: 34px;color: #fff;line-height: 75px
+        }
+    }
 </style>

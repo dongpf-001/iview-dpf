@@ -14,6 +14,9 @@ function alertMessage (options, type) {
     let instance = new AlertBox({
         data: {
             title: options.title,
+            setHeight: options.setHeight ? options.setHeight : false,
+            hideBody: options.hideBody ? options.hideBody : false,
+            icon: options.icon ? options.icon : 'iconguanbi',
             content: options.content,
             duration: options.duration,
             bodyTitle: options.bodyTitle,
