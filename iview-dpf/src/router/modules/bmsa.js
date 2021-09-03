@@ -117,6 +117,16 @@ export default {
             component: () => import('@/pages/components/bingo-modal')
         },
         {
+            path: 'bingo-alert',
+            name: `${oldpre}alert`,
+            meta: {
+                ...meta,
+                title: '消息组件',
+                closable: true
+            },
+            component: () => import('@/pages/components/bingo-alert')
+        },
+        {
             path: 'bingo-head-photo',
             name: `${oldpre}head-photo`,
             meta: {

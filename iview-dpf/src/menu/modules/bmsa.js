@@ -37,6 +37,10 @@ export default {
                     title: '弹窗选择组件'
                 },
                 {
+                    path: `${pre}bingo-alert`,
+                    title: '消息组件'
+                },
+                {
                     path: `${pre}bingo-select-icon`,
                     title: '图标选择组件'
                 },
