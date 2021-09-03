@@ -163,8 +163,8 @@
             },
             // 判断是否改边父节点状态
             handleChangeParent (row) {
-                this.tongjiRow = []
-                this.handleForTree(this.data12, row)
+                this.tongjiRow = [] // 定义的全局变量制空，看他的名称，他是获取你点击节点的同级其他节点
+                this.handleForTree(this.data12, row) // 然后调用循环树型数据方法
                 let flag = true
                 if (this.tongjiRow && this.tongjiRow.length) { // 如果存在同级节点
                     this.tongjiRow.forEach(item => {
@@ -177,15 +177,15 @@
             },
             // 循环树数据，用于判断
             handleForTree (dataArr, row) {
-                for (let i=0; i<dataArr.length; i++) {
-                    let item = dataArr[i]
-                    if (item.id == row.parentId) { // 找到父级
-                        this.tongjiRow = item.children
+                for (let i=0; i<dataArr.length; i++) { // 循环树形数据
+                    let item = dataArr[i] // 每条数据
+                    if (item.id == row.parentId) { // 找到当前节点父级
+                        this.tongjiRow = item.children // 父级下面的所有数据就是该节点的同级数据
                         return
                     }
                     // 如果循环到当前层级最后一条数据仍没找到该节点，则找他的子级，然后回调
                     if (item.children && item.children.length) {
-                        this.handleForTree(item.children, row)
+                        this.handleForTree(item.children, row) // 有children的话再次回调
                     }
                 }
             }
