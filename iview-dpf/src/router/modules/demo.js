@@ -57,6 +57,15 @@ export default {
                 title: '表格树型结构'
             },
             component: () => import('@/pages/demo/demo-table-tree')
+        },
+        {
+            path: 'demo-page-layout',
+            name: 'demo-page-layout',
+            meta: {
+                ...meta,
+                title: '不规则页面布局'
+            },
+            component: () => import('@/pages/demo/demo-page-layout')
         }
     ]
 };

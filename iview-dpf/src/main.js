@@ -21,6 +21,10 @@ import Setting from './setting';
 import Direction from 'vue-direction-key';
 Vue.use(Direction)
 
+// 控制标签宽高成比例的指令
+import proportion from 'vue-proportion-directive';
+Vue.use(proportion);
+
 // 混合
 import mixinApp from '@/mixins/app';
 

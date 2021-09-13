@@ -25,5 +25,9 @@ export default {
             path: `${pre}demo-table-tree`,
             title: '表格树型结构'
         },
+        {
+            path: `${pre}demo-page-layout`,
+            title: '不规则页面布局'
+        },
     ]
 }
