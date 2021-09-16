@@ -1,32 +1,18 @@
 <template>
     <div class="bmsa-table-action">
-        <Button type="primary" size="small" @click="handleEditMenu">
+        <slot name="list-button"></slot>
+        <Button type="primary" size="small" @click="handleEditMenu" v-if="showEdit && !row.hideEdit">
             <i class="icon iconfont iconbianji" />
             <span>{{$t('page.common.edit')}}</span>
         </Button>
-        <Button type="error" size="small" @click="handleDeleteBtn">
+        <Button type="error" size="small" @click="handleDeleteBtn" v-if="showDelete && !row.hideDelete">
             <i class="icon iconfont iconshanchu" />
             <span>{{$t('page.common.delete')}}</span>
         </Button>
-        <Dropdown transfer-class-name="bmsa-table-dropdown" trigger="click" transfer>
+        <Dropdown transfer-class-name="bmsa-table-dropdown" trigger="click" transfer  v-if="showMore && !row.hideMore">
             <Button size="small" class="bmsa-table-dropdown-btn" type="default">{{ $t('page.common.more') }}<Icon type="md-arrow-dropdown" /></Button>
             <Dropdown-menu slot="list">
-                <Button size="small">
-                    <Icon type="ios-lock-outline" />
-                    <span class="font">{{$t('system.page.common.PasswordReset')}}</span>
-                </Button>
-            </Dropdown-menu>
-            <Dropdown-menu slot="list">
-                <Button size="small">
-                    <i class="icon iconfont iconqunzuguanli" />
-                    <span class="font">{{$t('system.page.common.AssignmentGroup')}}</span>
-                </Button>
-            </Dropdown-menu>
-            <Dropdown-menu slot="list">
-                <Button size="small">
-                    <i class="icon iconfont iconjiaoseguanli" />
-                    <span class="font">{{$t('system.page.common.AssignRoles')}}</span>
-                </Button>
+                <slot name="drop-button"></slot>
             </Dropdown-menu>
         </Dropdown>
     </div>
@@ -40,6 +26,18 @@
             }
         },
         props: {
+            showEdit: { // 是否隐藏编辑
+                type: Boolean,
+                default: true
+            },
+            showDelete: { // 是否隐藏新建
+                type: Boolean,
+                default: true
+            },
+            showMore: { // 是否隐藏更多操作
+                type: Boolean,
+                default: false
+            },
             row: { // 某条数据
                 type: Object,
                 default: () => {

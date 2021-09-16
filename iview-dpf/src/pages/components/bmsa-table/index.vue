@@ -29,7 +29,17 @@
                 </template>
                 <vxe-grid slot="table" ref='xGrid' v-bind="gridOptions" class="bmsa-table">
                     <template #operate="{ row }">
-                        <bmsa-table-action :row="row" @on-edit="handleEdit" @on-delete="handleDelete"></bmsa-table-action>
+                        <bmsa-table-action show-more :row="row" @on-edit="handleEdit" @on-delete="handleDelete">
+                            <!--自定义显示下拉里的按钮-->
+                            <template #drop-button>
+                                <Dropdown-menu>
+                                    <Button size="small">
+                                        <Icon type="ios-alert-outline" />
+                                        <span class="font">自定义1</span>
+                                    </Button>
+                                </Dropdown-menu>
+                            </template>
+                        </bmsa-table-action>
                     </template>
                 </vxe-grid>
             </bmsa-table-tool>
@@ -90,6 +100,9 @@
                 }
                 Api.getList(params).then((res) => {
                     this.gridOptions.data = res.rows
+                    this.$set(this.gridOptions.data[3], 'hideEdit', true) // 该数据隐藏编辑按钮
+                    this.$set(this.gridOptions.data[4], 'hideDelete', true) // 该数据隐藏删除按钮
+                    this.$set(this.gridOptions.data[5], 'hideMore', true) // 该数据隐藏更多按钮
                 })
             },
             // 重置

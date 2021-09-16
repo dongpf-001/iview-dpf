@@ -1,5 +1,5 @@
 <template>
-    <div class="bmsa-table-tool-wrapper">
+    <div class="bmsa-table-tool-wrapper" :class="{'bmsa-table-full-screen':isFullscreen}">
         <!--toolbar区域-->
         <vxe-toolbar class-name="bmsa-table-tool-toolbar" v-if="showToolbar">
             <template #buttons><!-- toolbar左侧 -->
@@ -12,34 +12,29 @@
                 <div class="bmsa-table-tool-tool">
                     <div class="button-icon">
                         <slot name="right-buttons"></slot>
-                        <Tooltip transfer :content="$t('page.common.export')">
+                        <Tooltip v-if="showExport" transfer :content="$t('page.common.export')">
                             <span @click="handleExport">
                                 <i class="icon iconfont icondaochu"></i>
                             </span>
                         </Tooltip>
-                        <Tooltip transfer :content="$t('page.common.import')">
+                        <Tooltip v-if="showImport" transfer :content="$t('page.common.import')">
                             <span @click="handleImport">
                                 <i class="icon iconfont icondaoru"></i>
                             </span>
                         </Tooltip>
-                        <Tooltip transfer :content="$t('page.common.print')">
+                        <Tooltip v-if="showPrint" transfer :content="$t('page.common.print')">
                             <span @click="handlePrint">
                                 <i class="icon iconfont icondayin"></i>
                             </span>
                         </Tooltip>
-                        <Tooltip transfer :content="$t('page.common.refresh')">
+                        <Tooltip v-if="showRefresh" transfer :content="$t('page.common.refresh')">
                             <span @click="handleRefresh">
                                 <i class="icon iconfont iconshuaxin"></i>
                             </span>
                         </Tooltip>
-                        <Tooltip transfer content="开关">
-                            <span @click="handleSwitch">
-                                <i class="icon iconfont iconweibiaoti--"></i>
-                            </span>
-                        </Tooltip>
-                        <Tooltip transfer :content="!isFullScreen?$t('page.common.fullScreen'):$t('page.common.reduction')">
+                        <Tooltip v-if="showFullScreen" transfer :content="!isFullscreen?$t('page.common.fullScreen'):$t('page.common.reduction')">
                             <span @click="handleFullScreen">
-                                <i :class="!isFullScreen?'icon iconfont iconzuidahua':'icon iconfont iconzuidahua-huanyuan'"></i>
+                                <i :class="!isFullscreen?'icon iconfont iconzuidahua':'icon iconfont iconzuidahua-huanyuan'"></i>
                             </span>
                         </Tooltip>
                     </div>
@@ -81,11 +76,31 @@
         components: {},
         data () {
             return {
-                isFullScreen: false, // 全屏控制
+                isFullscreen: false, // 全屏控制
             }
         },
         props: {
             showToolbar: { // 是否显示toolbar
+                type: Boolean,
+                default: true
+            },
+            showExport: { // 是否显示导出
+                type: Boolean,
+                default: true
+            },
+            showImport: { // 是否显示导入
+                type: Boolean,
+                default: false
+            },
+            showPrint: { // 是否显示打印
+                type: Boolean,
+                default: false
+            },
+            showRefresh: { // 是否显示刷新
+                type: Boolean,
+                default: true
+            },
+            showFullScreen: { // 是否显示全屏
                 type: Boolean,
                 default: true
             },
@@ -142,12 +157,10 @@
             handleRefresh () {
                 this.$emit('on-refresh');
             },
-            // 开关方法，切换到卡片形式
-            handleSwitch () {
-                this.$emit('on-switch');
-            },
             // 全屏方法
             handleFullScreen () {
+                this.isFullscreen = !this.isFullscreen
+                this.$emit('on-full-screen', this.isFullscreen);
             },
             // 分页方法
             handlePageChange () {

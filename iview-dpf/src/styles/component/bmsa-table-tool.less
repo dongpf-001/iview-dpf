@@ -94,7 +94,12 @@
   }
   i.ivu-icon {
     position: absolute;
-    top: 6px;
+    top: 8px;
+  }
+  &:hover {
+    background: #2db7f5;
+    border-color: #2db7f5;
+    color: #fff;
   }
 }
 // 表格更多下拉
@@ -103,7 +108,20 @@
     margin-right: 5px;
     i {
       margin-right: 2px;
+      font-size: 14px;
     }
     font-size: 12px;
   }
+}
+// 表格全屏
+.bmsa-table-full-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  height: 100%;
+  padding: 8px;
+  z-index: 9999;
 }
