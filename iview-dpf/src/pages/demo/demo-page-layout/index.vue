@@ -42,7 +42,7 @@
                     <div class="defects-right">
                         <div class="div1" v-proportion="0.6">
                         </div>
-                        <div v-proportion="0.5">
+                        <div v-proportion="0.5" style="margin-bottom: 4px">
                             <div class="div2">
                             </div>
                             <div class="div3">
