@@ -53,6 +53,7 @@
                 size="medium"
                 align="center"
                 :current-page="page.currentPage"
+                :page-sizes="[20, 40, 50, 100]"
                 :page-size="page.pageSize"
                 :total="page.totalResult"
                 :layouts="['Total', 'PrevPage', 'JumpNumber', 'NextPage', 'Sizes']"
@@ -117,7 +118,7 @@
                 default: () => {
                     return { // 表格分页
                         currentPage: 1, // 查询页数
-                        pageSize: 10, // 查询数量
+                        pageSize: 20, // 查询数量
                         totalResult: 0, // 总数量
                     }
                 }
