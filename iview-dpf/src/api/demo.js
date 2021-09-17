@@ -12,4 +12,13 @@ Api.getList = function(data) {
     });
 }
 
+// 列表
+Api.getListData = function(data) {
+    return request({
+        url: baseUrl + '/api/getListData',
+        method: 'get',
+        params: data
+    });
+}
+
 export default Api
