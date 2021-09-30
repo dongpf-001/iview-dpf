@@ -88,7 +88,17 @@ export default {
                 },
                 {
                     path: `${pre}bmsa-bill`,
-                    title: '新单据'
+                    title: '新单据',
+                    children: [
+                        {
+                            path: `${pre}bmsa-bill-vertical`,
+                            title: '垂直单据'
+                        },
+                        {
+                            path: `${pre}bmsa-bill-horizontal`,
+                            title: '水平单据'
+                        },
+                    ]
                 },
                 {
                     path: `${pre}bingo-modal`,

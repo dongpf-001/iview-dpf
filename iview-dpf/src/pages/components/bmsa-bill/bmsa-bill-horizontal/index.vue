@@ -1,16 +1,16 @@
 <template>
     <div class="bill-wrapper" >
         <bmsa-bill billName="bill-template1" :tabs="tabs" active="one" :mode="mode" :isScroll="isScroll">
-            <div slot="one" ref="one" style="height:100%">
-                <span>基本信息简介</span>
+            <div slot="one" ref="one" :style="isScroll ? 'height: 600px' : 'height: 100%'">
+                <span>水平单据</span>
             </div>
-            <div slot="two" :style="isScroll ? 'height: 100px' : 'height: 100%'">
+            <div slot="two" :style="isScroll ? 'height: 600px' : 'height: 100%'">
                 <bingo-tabs value="name1">
                     <TabPane label="标签一" name="name1">标签一的内容</TabPane>
                     <TabPane label="标签二" name="name2">标签二的内容</TabPane>
                 </bingo-tabs>
             </div>
-            <div slot="three" :style="isScroll ? 'height: 100px' : 'height: 100%'">
+            <div slot="three" :style="isScroll ? 'height: 600px' : 'height: 100%'">
                 ------------ three
             </div>
             <template #footer>
@@ -25,7 +25,7 @@
     export default {
         data() {
             return {
-                isScroll: false, // 是否有滚动
+                isScroll: true, // 是否有滚动
                 tabs: [
                     {name: 'one', title: '基本信息', showLayout: false},
                     {name: 'two', title: '单据第二', icon: 'ios-people', hideTitleName: true},

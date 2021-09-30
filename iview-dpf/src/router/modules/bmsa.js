@@ -67,14 +67,24 @@ export default {
             component: () => import('@/pages/components/bmsa-modal-select')
         },
         {
-            path: 'bmsa-bill',
-            name: `${pre}bill`,
+            path: 'bmsa-bill-vertical',
+            name: `${pre}bill-vertical`,
             meta: {
                 ...meta,
-                title: '新单据',
+                title: '垂直单据',
                 closable: true
             },
-            component: () => import('@/pages/components/bmsa-bill')
+            component: () => import('@/pages/components/bmsa-bill/bmsa-bill-vertical')
+        },
+        {
+            path: 'bmsa-bill-horizontal',
+            name: `${pre}bill-horizontal`,
+            meta: {
+                ...meta,
+                title: '水平单据',
+                closable: true
+            },
+            component: () => import('@/pages/components/bmsa-bill/bmsa-bill-horizontal')
         },
         {
             path: 'bingo-toolbar',
