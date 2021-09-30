@@ -8,7 +8,7 @@
                 <div slot="right" class="demo-split-pane">
                     <Divider>详细描述</Divider>
                     <h3>使用注意事项</h3>
-                    <p style="margin-top: 12px">1、需要构造树形结构数据，isRender默认是false，代表组件内部给渲染节点，显示数据中label和name字段</p>
+                    <p style="margin-top: 12px">1、readonly控制只读</p>
                 </div>
             </Split>
         </Card>
