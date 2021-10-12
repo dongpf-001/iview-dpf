@@ -21,7 +21,7 @@
 </template>
 
 <script>
-
+    import bmsaBill from '@/components/bmsa-bill/index-other.vue';
     export default {
         data() {
             return {
@@ -31,7 +31,7 @@
                     {name: 'two', title: '单据第二', icon: 'ios-people', hideTitleName: true},
                     {name: 'three', title: '单据第三个数字超长号三个数字超长号', icon: 'ios-stats', hideTitle: true},
                 ],
-                mode: 'left',
+                mode: 'right',
                 query: {
                     col: 3,
                     labelWidth: 90,
@@ -127,7 +127,7 @@
                 ],
             };
         },
-        components: {},
+        components: {bmsaBill},
         created() {
         },
         mounted() {

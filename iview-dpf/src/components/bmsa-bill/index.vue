@@ -1,21 +1,23 @@
 <template>
-    <div class="bill-in">
-        <div class="bill-header" v-if="showToolbar">
-          <slot name="footer"></slot>
-          <div class="bill-setting">
-            <Button type="text" icon="ios-settings"></Button>
-            <Select v-model="checkboxModel" multiple placeholder="" @on-change="handleSaveTabs" @on-open-change="handleOpenTabs">
-              <Option v-for="item in datasCheck"
-                      :value="item.label"
-                      :disabled="item.disabled"
-                      :key="item.label">{{ item.value }}</Option>
-            </Select>
-          </div>
-        </div>
+    <div class="bill-new-component">
+        <!--toolbar区域-->
+        <bingo-toolbar :showAllButton="showButton.showAllButton" :showOpenButton="showButton.showOpenButton" v-if="showToolbar">
+            <span slot="toolbar">
+                <slot name="bill-toolbar">
+                    <Button type='primary' icon='iconfont iconbaocun1' @click="onSave">保存</Button>
+                    <Select v-model="checkboxModel" multiple placeholder="" class="bill-toolbar-select" @on-change="handleSaveTabs" @on-open-change="handleOpenTabs">
+                        <Option v-for="item in datasCheck"
+                                :value="item.label"
+                                :disabled="item.disabled"
+                                :key="item.label">{{ item.value }}</Option>
+                    </Select>
+                </slot>
+            </span>
+        </bingo-toolbar>
         <!--标题-->
         <h3 class="ivu-text-center" v-if="title">{{title}}</h3>
         <!--单据内容区域-->
-        <div class="bill-container" :style="billNewStyle" :class='billClass'>
+        <div class="bill-new-wrapper" :style="billNewStyle"  :class='billClass'>
             <slot name="base"></slot>
             <div :class='billMenuClass' :style="billMenuStyle" v-if="showTabs">
                 <Menu ref="bill-new-menu" :active-name="activeName" width="130px"
@@ -24,12 +26,7 @@
                     <div :class='billItemClass' v-for="(tab, key) in tabs" v-if="!tab.parentName && tab.showTabs">
                         <!-- 没有下拉的menu -->
                         <menu-item :name="tab.name" :key="key" v-if="!tab.drop">
-                            <div class="bill-new-menu-svg">
-                                <svg aria-hidden="true" width="30px" height="30px">
-                                    <use xlink:href="#icondanjusvg1" width="100%"></use>
-                                </svg>
-                            </div>
-                            <Icon class="bill-new-menu-icon" :type="tab.icon ? tab.icon : 'md-list-box'"/>
+                            <Icon class="bill-new-menu-icon" :type="tab.icon ? tab.icon : ''"/>
                             <span>{{tab.title}}</span>
                         </menu-item>
                         <!-- 存在下拉的menu -->
@@ -49,38 +46,33 @@
                 </Menu>
             </div>
             <div :class="contentClass" ref="content" v-scroll="loadMore">
-                <Card
-                    dis-hover
-                    :class="[selectName == tab.name && fullFlag ? 'card-full' : '', tab.expend || mode == 'top' ? '' : 'expendClass', showTabs ? 'content-card' : '']"
-                    :ref="tab.name"
-                    v-if="tab.show"
-                    v-for="(tab, key) in tabs"
-                    :key="key"
-                >
-                    <p slot="title" v-if="(mode == 'right' || mode == 'left') && !tab.hideTitle">
-                        <Icon :type="!tab.hideTitleName ? tab.icon : ''" class="ivu-mr-8" />
-                        {{ !tab.hideTitleName ? tab.title : '' }}
+                <Card dis-hover :class='[selectName==tab.name && fullFlag ? "card-full" : "",
+                        tab.expend||(mode=="top")?"":"expendClass", showTabs ? "content-card": ""]'
+                      :ref="tab.name" v-if="tab.show" v-for="(tab, key) in tabs" :key="key">
+                    <p slot="title" v-if="(mode=='right' || mode=='left') && !tab.hideTitle"><Icon :type="!tab.hideTitleName ?tab.icon : ''" class="ivu-mr-8"/>{{!tab.hideTitleName ? tab.title : ''}}
                         <template>
                             <!--基本信息布局-->
-                            <Select
-                                v-model="checkboxModelLay"
-                                v-if="tab.showLayout"
-                                multiple
-                                placeholder=""
-                                class="bill-toolbar-select shrink-card-icon2"
-                                @on-change="layoutSaveClick(tab)"
-                                @on-open-change="handleOpen(tab, $event)"
-                            >
-                                <Option v-for="item in datasCheckLay" :value="item.label" :disabled="item.disabled" :key="item.label">{{ item.value }} </Option>
+                            <Select v-model="checkboxModelLay" v-if="tab.showLayout" multiple placeholder=""
+                                    class="bill-toolbar-select shrink-card-icon2" @on-change="layoutSaveClick(tab)"
+                                    @on-open-change="handleOpen(tab, $event)">
+                                <Option v-for="item in datasCheckLay"
+                                        :value="item.label"
+                                        :disabled="item.disabled"
+                                        :key="item.label">{{ item.value }}</Option>
                             </Select>
-                            <Button type="text" :icon="tab.showOther && isScroll? 'ios-arrow-down':'ios-arrow-up'" class="collapsed-btn" @click="showTab(tab, key)" v-if="tab.showOther === false"></Button>
-                            <Button type="text" :icon="tab.expend && isScroll? 'ios-arrow-down':'ios-arrow-up'" class="collapsed-btn" @click="showTab(tab, key)" v-else></Button>
-                            <Button type="text" :custom-icon="fullFlag && !tab.hideFull? 'iconfont iconsuoxiao2':'iconfont iconfangda2'" class="full-btn" @click="fullOpen(tab.name)"></Button>
+                            <Button icon="ios-arrow-down" class="shrink-card-icon" v-if="tab.expend && isScroll" @click="showTab(tab)"></Button><!-- 展开 -->
+                            <Button icon="ios-arrow-up" class="shrink-card-icon" v-if="!tab.expend && isScroll" @click="showTab(tab)"></Button><!-- 展开 -->
+                            
+                            <Button icon="md-resize" class="shrink-card-icon1" v-if="!fullFlag && !tab.hideFull" @click="fullOpen(tab.name)"></Button>
+                            <Button icon="icon iconfont iconweibiaoti11" class="shrink-card-icon1" v-if="fullFlag && !tab.hideFull" @click="fullOpen(tab.name)"></Button>
                         </template>
                     </p>
                     <!--不使用收缩展开动画效果，影响懒加载和响应式加载-->
-                    <div v-if="mode == 'right' || mode == 'left'" class="bill-wrapper-context-body">
-                        <slot :name="tab.name" v-show="tab.expend"></slot>
+                    <!--<bingo-shrink v-model="tab.expend" v-if="mode=='right' || mode=='left'" :height="tab.height">-->
+                    <!--<slot :name="tab.name"></slot>-->
+                    <!--</bingo-shrink>-->
+                    <div v-if="mode=='right' || mode=='left'" class="bill-wrapper-context-body">
+                        <slot :name="tab.name" v-if="tab.expend"></slot>
                     </div>
                     <!--<slot :name="tab.name"></slot>-->
                     <slot :name="tab.name" v-if="mode=='top'"></slot>
@@ -91,14 +83,9 @@
 </template>
 
 <script>
-    import './bill.less'
-
     export default {
-        components: { },
         data() {
             return {
-                // 获取websql中的默认数据
-                websqlData: [],
                 horWidth: '100%',
                 activeName: 'one', // 右侧定位的name
                 selectName: '', // 全屏时选中的name
@@ -118,16 +105,14 @@
                 },
                 oldScrollTop: 0, //记录上一次滚动结束后的滚动距离
                 scrollTop: 0 // 记录当前的滚动距离
-            }
+            };
         },
         props: {
-            billName: {
-                // 单据的名称，用于区分不同单据，用于缓存单据布局
+            billName: { // 单据的名称，用于区分不同单据，用于缓存单据布局
                 type: String,
                 default: 'defaultName'
             },
-            isScroll: {
-                // 是否滚动
+            isScroll: { // 是否滚动
                 type: Boolean,
                 default: true
             },
@@ -135,7 +120,7 @@
                 type: Boolean,
                 default: true
             },
-            title: {
+            title:{
                 type: Boolean,
                 default: false
             },
@@ -145,41 +130,51 @@
                     return []
                 }
             },
-            showTabs: {
-                // 纵向单据时是否显示tabs
+            showTabs: { // 纵向单据时是否显示tabs
                 type: Boolean,
                 default: true
             },
-            mode: {
-                // 标签所在的位置  top right bottom left  mode=="horizontal"
+            mode: { // 标签所在的位置  top right bottom left
                 type: String,
                 default: 'right'
             },
             active: {
-                type: String
+                type: String,
             }
         },
         watch: {
             tabs: {
                 deep: true,
-                handler: function(value, oldValue) {
-                    if (value.length !== oldValue.length) {
-                        // 当tabs长度发生变化（用于动态添加tabs）
+                handler: function (value, oldValue) {
+                    if (value.length !== oldValue.length) { // 当tabs长度发生变化（用于动态添加tabs）
                         for (let tab of this.tabs) {
                             this.$set(tab, 'expend', true) // 是否展开
                             this.$set(tab, 'showTabs', true) // 显示tab布局
                         }
                         // 初始化显示布局
-                        this.getWebsql()
+                        let localData = JSON.parse(localStorage.getItem(this.billName));
+                        if (localData && localData.length > 0) { // 如果有缓存的布局
+                            this.tabs.forEach(item2 => {
+                                this.$set(item2, 'showTabs', false)
+                            })
+                            localData.forEach(item => {
+                                this.tabs.forEach(item2 => {
+                                    if (item2.name == item) {
+                                        this.$set(item2, 'showTabs', true)
+                                    }
+                                })
+                            })
+                        }
+                        this.$nextTick(() => { // 页面初始化后显示part
+                            this.initTabs();
+                        })
                     }
                 }
             },
-            tabHeight: {
-                // 监听明细总高度
+            tabHeight: { // 监听明细总高度
                 deep: true,
-                handler: function(value) {
-                    if (value > this.$refs.content.offsetHeight) {
-                        // 判断明细高度是否超过页面高度
+                handler: function (value) {
+                    if (value > this.$refs.content.offsetHeight) { // 判断明细高度是否超过页面高度
                         this.forTab = false
                     } else {
                         this.tabIndex += 1
@@ -189,34 +184,45 @@
             },
             scrollTop(newValue, oldValue) {
                 setTimeout(() => {
-                    if (newValue == this.$refs.content.scrollTop) {
-                        // 利用延迟判断是否滚动结束
-                        this.oldScrollTop = newValue //每次滚动结束后都要给oldScrollTop赋值
+                    if(newValue == this.$refs.content.scrollTop) { // 利用延迟判断是否滚动结束
+                        console.log('滚动结束');
+                        this.oldScrollTop = newValue; //每次滚动结束后都要给oldScrollTop赋值
                         this.isTabClick = false // 判断是否走滚动事件
                     }
-                }, 20) //必须使用延时器，否则每次newValue和this.$refs.content.scrollTop都相等，无法判断，20ms刚好大于watch的侦听周期，故延时20ms
-                if (this.oldScrollTop == oldValue) {
-                //每次滚动开始时oldScrollTop与oldValue相等
+                }, 20); //必须使用延时器，否则每次newValue和this.$refs.content.scrollTop都相等，无法判断，20ms刚好大于watch的侦听周期，故延时20ms
+                if(this.oldScrollTop == oldValue) { //每次滚动开始时oldScrollTop与oldValue相等
+                    console.log('滚动开始');
                 }
             }
         },
-
+        components: {},
         created() {
             for (let tab of this.tabs) {
                 this.$set(tab, 'expend', true) // 是否展开
                 this.$set(tab, 'showTabs', true) // 显示tab布局
-            // this.$set(tab, 'show', true) // 是否展开
+                // this.$set(tab, 'show', true) // 是否展开
             }
             // this.$set(this.tabs[0], 'show', true)
-            // 获取websql中的数据
-            this.getWebsql()
+
+            // 初始化显示布局
+            let localData = JSON.parse(localStorage.getItem(this.billName));
+            if (localData && localData.length > 0) { // 如果有缓存的布局
+                this.tabs.forEach(item2 => {
+                    this.$set(item2, 'showTabs', false)
+                })
+                localData.forEach(item => {
+                    this.tabs.forEach(item2 => {
+                        if (item2.name == item) {
+                            this.$set(item2, 'showTabs', true)
+                        }
+                    })
+                })
+            }
         },
         mounted() {
-            this.activeName = this.active
-            this.$nextTick(() => {
-            // 页面初始化后显示part
-            // this.getWebsql()
-            // this.initTabs();
+            this.activeName=this.active;
+            this.$nextTick(() => { // 页面初始化后显示part
+                this.initTabs();
             })
             // 初始化
             if (this.mode == 'top' || !this.isScroll) {
@@ -224,7 +230,7 @@
                     if (tab.drop) {
                         tab.show = false
                     } else {
-                        if (tab.name == this.activeName || tab.parentName == this.activeName) {
+                        if (tab.name==this.activeName || tab.parentName==this.activeName) {
                             tab.show = true
                         } else {
                             tab.show = false
@@ -234,114 +240,79 @@
             }
         },
         computed: {
-            // 单据内容区域的高度计算
-            billNewStyle() {
-                const computedHeight = (this.title ? 32 : 0) + (this.showToolbar ? 48 : 0)
-                return {
-                    height: `calc(100% - ${computedHeight}px)`
-                }
+            billNewStyle() { // 单据内容区域的高度计算
+                let style = {};
+                style['height'] = `calc(100% - ${this.sHeight}px)`;
+                return style
             },
-            toolbarHeight () { // toolbar的高度
-                if (this.showToolbar) {
-                    return 48
-                } else {
+            sHeight(){
+                return this.toolbarHeight + this.titelHeiht
+            },
+            titelHeiht(){ // 标题的高度
+                if(this.title){
+                    return 32
+                }else {
                     return 0
                 }
             },
-            billClass () { // 单据内容class
+            toolbarHeight(){ // toolbar的高度
+                if(this.showToolbar){
+                    return 48
+                }else {
+                    return 0
+                }
+            },
+            billClass() { // 单据内容class
                 return [{
-                    'bill-top': this.mode === 'top',
-                    'bill-right': this.mode === 'right',
-                    'bill-bottom': this.mode === 'bottom',
-                    'bill-left': this.mode === 'left',
-                    'bill-full': this.fullFlag
+                    ['bill-top']: this.mode === 'top',
+                    ['bill-right']: this.mode === 'right',
+                    ['bill-bottom']: this.mode === 'bottom',
+                    ['bill-left']: this.mode === 'left',
+                    ['bill-full']: this.fullFlag,
                 }];
             },
-            billItemClass() {
-                // 标签item的class
-                return [
-                    {
-                        ['bill-item-top']: this.mode === 'top',
-                        ['bill-item-right']: this.mode === 'right',
-                        ['bill-item-bottom']: this.mode === 'bottom',
-                        ['bill-item-left']: this.mode === 'left'
-                    }
-                ]
+            billItemClass() { // 标签item的class
+                return [{
+                    ['bill-item-top']: this.mode === 'top',
+                    ['bill-item-right']: this.mode === 'right',
+                    ['bill-item-bottom']: this.mode === 'bottom',
+                    ['bill-item-left']: this.mode === 'left'
+                }];
             },
-            billMenuClass() {
-                // 单据标签class
-                return [
-                    {
-                        ['ivu-top']: this.mode === 'top',
-                        ['ivu-right']: this.mode === 'right',
-                        ['ivu-bottom']: this.mode === 'bottom',
-                        ['ivu-left']: this.mode === 'left'
-                    }
-                ]
+            billMenuClass() { // 单据标签class
+                return [{
+                    ['ivu-top']: this.mode === 'top',
+                    ['ivu-right']: this.mode === 'right',
+                    ['ivu-bottom']: this.mode === 'bottom',
+                    ['ivu-left']: this.mode === 'left'
+                }];
             },
-            billMenuStyle() {
-                // 单据内容区域的宽度计算
-                let style = {}
+            billMenuStyle() { // 单据内容区域的宽度计算
+                let style = {};
                 style['width'] = this.mode === 'top' || this.mode === 'bottom' ? `width: ${this.horWidth}` : ''
                 return style
             },
             contentClass() {
-                return [
-                    {
-                        ['hContent']: this.mode === 'top' && !this.$slots.base,
-                        ['hContent-hy']: this.mode === 'top' && this.$slots.base && this.$slots.base.length > 0,
-                        ['content i-scrollbar']: this.mode !== 'top' && this.isScroll, // 带滚动
-                        ['content n-scrollbar']: this.mode !== 'top' && !this.isScroll // 不带滚动
-                    }
-                ]
+                return [{
+                    ['hContent']: this.mode === 'top' && !this.$slots.base,
+                    ['hContent-hy']: this.mode === 'top' && this.$slots.base && this.$slots.base.length>0,
+                    ['content i-scrollbar']: this.mode !== 'top' && this.isScroll, // 带滚动
+                    ['content n-scrollbar']: this.mode !== 'top' && !this.isScroll, // 不带滚动
+                }];
             },
             cardClass() {
-                return [
-                    {
-                        ['card-full']: this.fullFlag
-                    }
-                ]
+                return [{
+                    ['card-full']: this.fullFlag,
+                }];
             }
         },
         methods: {
-            getWebsql() {
-                let _this = this
-                _this.$db.transaction(function(tx) {
-                    tx.executeSql('SELECT * FROM billLayout', [], function(tx, results) {
-                        for (let i = 0; i < results.rows.length; i++) {
-                            let name = results.rows.item(i).name
-                            if (name === _this.billName) {
-                                _this.websqlData = JSON.parse(results.rows.item(i).layout)
-                            }
-                        }
-                        // 初始化显示布局
-                        let localData = _this.websqlData
-                        if (localData && localData.length > 0) {
-                            // 如果有缓存的布局
-                            _this.tabs.forEach((item2) => {
-                                _this.$set(item2, 'showTabs', false)
-                            })
-                            localData.forEach((item) => {
-                                _this.tabs.forEach((item2) => {
-                                    if (item2.name == item) {
-                                        _this.$set(item2, 'showTabs', true)
-                                    }
-                                })
-                            })
-                        }
-                        // 初始化显示几个tab
-                        _this.initTabs()
-                    })
-                })
-            },
-            initTabs() {
-                //初始化显示几个tab 懒加载，一个一个加载
-                if (this.mode == 'top' || !this.isScroll) {
+            initTabs() {  //初始化显示几个tab 懒加载，一个一个加载
+                if (this.mode == 'top'  || !this.isScroll) {
                     for (let tab of this.tabs) {
-                        if (tab.name == this.activeName) {
+                        if (tab.name==this.activeName) {
                             tab.show = true
-                            this.$nextTick(() => {
-                                // 初始化part布局
+                            this.$nextTick(() => { // 初始化part布局
                                 this.initPart(tab)
                             })
                         } else {
@@ -350,16 +321,14 @@
                     }
                 } else {
                     let tab = {}
-                    for (let i = this.tabIndex; i < this.tabs.length; i++) {
-                        // 判断当前tab是否在缓存中
+                    for (let i=this.tabIndex;i<this.tabs.length;i++) { // 判断当前tab是否在缓存中
                         if (this.getTabFlag(this.tabs[i])) {
                             tab = this.tabs[i]
                             this.tabIndex = i
                             break
                         }
                     }
-                    if (this.forTab) {
-                        // 判断显示明细的高度是否超过页面高度
+                    if (this.forTab) { // 判断显示明细的高度是否超过页面高度
                         this.$set(this.tabs[this.tabIndex], 'show', true)
                         this.$nextTick(() => {
                             // 监听tabHeight，如果明细高度没有超过页面高度则回调再显示下一个明细
@@ -372,8 +341,7 @@
                 }
             },
             handleScroll(ref, isInit) {
-                if (!isInit) {
-                    // 如果不是初始化，只有点击tab时才将isTabClick改为true
+                if (!isInit) { // 如果不是初始化，只有点击tab时才将isTabClick改为true
                     this.isTabClick = true
                 }
                 this.oldScrollTop = 0
@@ -384,8 +352,7 @@
                     for (let tab of this.tabs) {
                         if (tab.name == ref) {
                             tab.show = true
-                            this.$nextTick(() => {
-                                // 初始化part布局
+                            this.$nextTick(() => { // 初始化part布局
                                 this.initPart(tab)
                             })
                         } else {
@@ -402,20 +369,19 @@
                     this.$nextTick(() => {
                         this.$ScrollTop(this.$refs.content, {
                             // to: this.$refs[ref][0].$el.offsetTop,
-                            to: this.$refs[ref][0].$el.offsetTop, // @liuhzhbj 目的：垂直回滚tab标签，使其定位到原点
+                            to: this.$refs[ref][0].$el.offsetTop - 10, // @liuhzhbj 目的：垂直回滚tab标签，使其定位到原点
                             time: 600
                         })
-                    })
+                    });
                 }
-                this.$emit('handle-scroll', ref)
+                this.$emit('handle-scroll', ref);
             },
-            loadMore(el) {
-                // 滚动触发的事件
-                this.scrollTop = this.$refs.content && this.$refs.content.scrollTop
+            loadMore(el) { // 滚动触发的事件
+                this.scrollTop = this.$refs.content && this.$refs.content.scrollTop;
                 if (!this.isTabClick) {
                     //判断滚动到最下方
-                    if ((this.mode == 'right' || this.mode == 'left') && this.isScroll) {
-                        if (el.clientHeight + el.scrollTop >= el.scrollHeight - 10) {
+                    if((this.mode == 'right' || this.mode=='left') && this.isScroll){
+                        if (el.clientHeight + el.scrollTop >= el.scrollHeight-10) {
                             for (let tab of this.tabs) {
                                 let tabFlag = this.getTabFlag(tab) // 判断当前tab是否在缓存中
                                 if (!tab.show && tabFlag) {
@@ -425,7 +391,7 @@
                                 setTimeout(() => {
                                     if (this.tabs[this.tabs.length - 1].name == tab.name) {
                                         this.activeName = tab.name
-                                        this.tabName = tab.name
+                                        this.tabName = tab.name;
                                     }
                                 }, 120)
                             }
@@ -433,47 +399,39 @@
                     }
                     // 滚动位置判断显示到哪个tab
                     for (let tab of this.tabs) {
-                        if (this.$refs[tab.name] && this.$refs[tab.name][0] && this.$refs[tab.name][0].$el && this.$refs[tab.name][0].$el.getBoundingClientRect().top < 200) {
+                        if (this.$refs[tab.name] && this.$refs[tab.name][0] && this.$refs[tab.name][0].$el && (this.$refs[tab.name][0].$el.getBoundingClientRect().top < 200)) {
                             setTimeout(() => {
                                 this.$nextTick(() => {
                                     this.activeName = tab.name
-                                    this.tabName = tab.name
-                                })
+                                    this.tabName = tab.name;
+                                });
                             }, 120)
                         }
                     }
                 }
             },
-            fullOpen(name) {
-                // 全屏
-                this.selectName = name
-                this.fullFlag = !this.fullFlag
-                this.$emit('fullOpen', this.fullFlag, name)
+            fullOpen (name) { // 全屏
+                this.selectName = name;
+                this.fullFlag = !this.fullFlag;
+                this.$emit('fullOpen', this.fullFlag, name);
                 this.handleScroll(name)
             },
-            showTab(tab, index) {
-                if (tab.showOther != null && tab.showOther != undefined) {
-                    tab.expend = true
-                    tab.showOther = !tab.showOther
-                    this.$parent.changePartContentHeight(tab.showOther, index)
-                } else {
-                    tab.expend = !tab.expend
-                }
+            showTab (tab) {
+                tab.expend = !tab.expend
             },
-            onSave() {
-                this.$emit('on-save')
+            onSave () {
+                this.$emit('on-save');
             },
-            selectClick() {},
-            handleOpen(tab, event) {
-                // part布局
-                if (event) {
-                    // 如果是展开的话
+            selectClick () {
+                console.log('123')
+            },
+            handleOpen (tab, event) { // part布局
+                if (event) { // 如果是展开的话
                     this.datasCheckLay = []
                     this.checkboxModelLay = []
                     let layData = this.$slots[tab.name] && this.$slots[tab.name][0].context.layData
                     for (let i in layData) {
-                        this.datasCheckLay.push({
-                            // tab布局的数据
+                        this.datasCheckLay.push({ // tab布局的数据
                             label: layData[i].label,
                             value: layData[i].label,
                             disabled: layData[i].required || layData[i].isLink // 定位的tab不可以隐藏
@@ -484,52 +442,29 @@
                     }
                 }
             },
-            layoutSaveClick(tab) {
-                // part布局
-                let _this = this
-                _this.$db.transaction(function(tx) {
-                    tx.executeSql('SELECT * FROM billLayout', [], function(tx, results) {
-                        let _hasExistName = false
-                        for (let i = 0; i < results.rows.length; i++) {
-                            let name = results.rows.item(i).name
-                            if (name === _this.billName + '-' + tab.name) {
-                                _hasExistName = true
-                                // 更新
-                                tx.executeSql('update billLayout set layout=? where name=?', [JSON.stringify(_this.checkboxModelLay), _this.billName + '-' + tab.name])
+            layoutSaveClick (tab) { // part布局
+                localStorage.setItem(this.billName + '-' + tab.name, JSON.stringify(this.checkboxModelLay));
+                let localLayData = JSON.parse(localStorage.getItem(this.billName + '-' + tab.name));
+                let layData = this.$slots[tab.name] && this.$slots[tab.name][0].context.layData
+                if (localLayData.length > 0) {
+                    for (let i in layData) {
+                        layData[i].show = false
+                    }
+                    localLayData.forEach(item => {
+                        for (let i in layData) {
+                            if (layData[i].label ==  item) {
+                                this.$set(layData[i], 'show', true)
                             }
-                        }
-                        if (!_hasExistName) {
-                            // 初始化 + 新创建
-                            tx.executeSql('insert into billLayout (name, layout) values (?,?)', [_this.billName + '-' + tab.name, JSON.stringify(_this.checkboxModelLay)])
-                        }
-                        // 如果有缓存布局
-                        let localLayData = _this.checkboxModelLay
-                        let layData = _this.$slots[tab.name] && _this.$slots[tab.name][0].context.layData
-                        if (localLayData.length > 0) {
-                            for (let i in layData) {
-                                layData[i].show = false
-                            }
-                            localLayData.forEach((item) => {
-                                for (let i in layData) {
-                                    if (layData[i].label == item) {
-                                        _this.$set(layData[i], 'show', true)
-                                    }
-                                }
-                            })
                         }
                     })
-                })
+                }
             },
-            // 底部点击展开事件
-            handleOpenTabs(flag) {
-                // tab布局
-                if (flag) {
-                    // 如果是展开的话
+            handleOpenTabs (flag) { // tab布局
+                if (flag) { // 如果是展开的话
                     this.datasCheck = []
                     this.checkboxModel = []
-                    this.tabs.forEach((item) => {
-                        this.datasCheck.push({
-                            // tab布局的数据
+                    this.tabs.forEach(item => {
+                        this.datasCheck.push({ // tab布局的数据
                             label: item.name,
                             value: item.title,
                             disabled: item.name == this.active // 定位的tab不可以隐藏
@@ -538,63 +473,40 @@
                             this.checkboxModel.push(item.name)
                         }
                     })
+                    console.log(this.checkboxModel)
                 }
             },
-            handleSaveTabs() {
-                // tab布局保存后
-                // tab布局保存到websql
-                let _this = this
-                _this.$db.transaction(function(tx) {
-                    tx.executeSql('SELECT * FROM billLayout', [], function(tx, results) {
-                        let _hasExistName = false
-                        for (let i = 0; i < results.rows.length; i++) {
-                            let name = results.rows.item(i).name
-                            if (name === _this.billName) {
-                                _hasExistName = true
-                                // 更新
-                                tx.executeSql('update billLayout set layout=? where name=?', [JSON.stringify(_this.checkboxModel), _this.billName])
-                            }
-                        }
-                        if (!_hasExistName) {
-                            // 初始化 + 新创建
-                            tx.executeSql('insert into billLayout (name, layout) values (?,?)', [_this.billName, JSON.stringify(_this.checkboxModel)])
-                        }
-                        // 如果有缓存布局
-                        let localData = _this.checkboxModel
-                        if (localData && localData.length > 0) {
-                            // 如果有缓存的布局
-                            _this.tabs.forEach((item2) => {
-                                _this.$set(item2, 'showTabs', false)
-                                _this.$set(item2, 'show', false)
-                            })
-                            localData.forEach((item) => {
-                                _this.tabs.forEach((item2) => {
-                                    if (item2.name == item) {
-                                        _this.$set(item2, 'showTabs', true)
-                                        if (!_this.isScroll) {
-                                            // 如果没有滚动的话
-                                            if (item2.name == _this.activeName) {
-                                                // 只有当前tab页面的明细才会显示
-                                                _this.$set(item2, 'show', true)
-                                            }
-                                        } else {
-                                            _this.$set(item2, 'show', true)
-                                        }
-                                    }
-                                })
-                            })
-                            _this.handleScroll(_this.active)
-                        }
+            handleSaveTabs () { // tab布局保存后
+                localStorage.setItem(this.billName, JSON.stringify(this.checkboxModel));
+                let localData = JSON.parse(localStorage.getItem(this.billName));
+                if (localData && localData.length > 0) { // 如果有缓存的布局
+                    this.tabs.forEach(item2 => {
+                        this.$set(item2, 'showTabs', false)
+                        this.$set(item2, 'show', false)
                     })
-                })
+                    localData.forEach(item => {
+                        this.tabs.forEach(item2 => {
+                            if (item2.name == item) {
+                                this.$set(item2, 'showTabs', true)
+                                if (!this.isScroll) { // 如果没有滚动的话
+                                    if (item2.name == this.activeName) { // 只有当前tab页面的明细才会显示
+                                        this.$set(item2, 'show', true)
+                                    }
+                                } else {
+                                    this.$set(item2, 'show', true)
+                                }
+                            }
+                        })
+                    })
+                    this.handleScroll(this.active)
+                }
             },
-            getTabFlag(tab) {
-                // 判断当前tab是否在缓存中
+            getTabFlag (tab) { // 判断当前tab是否在缓存中
+                let localData = JSON.parse(localStorage.getItem(this.billName));
                 let tabFlag = true
-                let localData = this.websqlData
                 if (localData && localData.length > 0) {
                     tabFlag = false
-                    localData.forEach((item) => {
+                    localData.forEach(item => {
                         if (item == tab.name) {
                             tabFlag = true
                         }
@@ -602,37 +514,57 @@
                 }
                 return tabFlag
             },
-            initPart(tab) {
-                // 初始化明细布局
+            initPart (tab) { // 初始化明细布局
                 if (tab.showLayout) {
-                    let _this = this
-                    _this.$db.transaction(function(tx) {
-                        tx.executeSql('SELECT * FROM billLayout', [], function(tx, results) {
-                            for (let i = 0; i < results.rows.length; i++) {
-                                let name = results.rows.item(i).name
-                                if (name === _this.billName + '-' + tab.name) {
-                                    let localLayData = JSON.parse(results.rows.item(i).layout)
-                                    let layData = _this.$slots[tab.name] && _this.$slots[tab.name][0].context.layData
-                                    if (localLayData && localLayData.length > 0) {
-                                        for (let i in layData) {
-                                            layData[i].show = false
-                                        }
-                                        localLayData.forEach((item) => {
-                                            for (let i in layData) {
-                                                if (layData[i].label == item) {
-                                                    _this.$set(layData[i], 'show', true)
-                                                }
-                                            }
-                                        })
-                                    }
+                    let localLayData = JSON.parse(localStorage.getItem(this.billName + '-' + tab.name));
+                    let layData = this.$slots[tab.name] && this.$slots[tab.name][0].context.layData
+                    if (localLayData.length > 0) {
+                        for (let i in layData) {
+                            layData[i].show = false
+                        }
+                        localLayData.forEach(item => {
+                            for (let i in layData) {
+                                if (layData[i].label ==  item) {
+                                    this.$set(layData[i], 'show', true)
                                 }
                             }
                         })
-                    })
+                    }
                 }
             }
         }
-    }
+    };
 </script>
 <style lang="less">
+    .expendClass .ivu-card-body{
+        padding: 0px !important;
+    }
+    .bill-full .fullScreen{
+        height: calc(100% - 156px)!important;
+        position: fixed!important;
+        top: 56px!important;
+        background-color: #fff;
+    }
+    .bill-toolbar-select {
+        width: 30px;
+        color: #fff;
+        .ivu-select-item:after {
+            right: 0!important;
+        }
+        .ivu-select-selection {
+            background-color: #0086e2;
+        }
+        .ivu-select-selection:hover {
+            background-color: #0071be;
+        }
+        .ivu-tag-checked {
+            display: none;
+        }
+        .ivu-icon {
+            color: #fff
+        }
+        .ivu-icon:before {
+            content: "\f337"!important;
+        }
+    }
 </style>
