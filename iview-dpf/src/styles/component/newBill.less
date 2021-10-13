@@ -13,8 +13,13 @@
     top: 0;
     bottom: 0;
   }
-  .ivu-menu-item-active:not(.ivu-menu-submenu):after {
-    display: none!important;
+  .ivu-menu-item-active:not(.ivu-menu-submenu) {
+    .bill-new-menu-icon {
+      color: #2d8cf0;
+    }
+    &:after {
+      display: none!important;
+    }
   }
   .expendClass .ivu-card-body{
     padding: 0px !important;
@@ -111,9 +116,6 @@
   }
   .h400 {
     height: 500px;
-  }
-  .bill-new-menu-icon {
-    color: #2d8cf0;
   }
   .ivu-menu-right .ivu-menu-light:after {
     display: none!important;
