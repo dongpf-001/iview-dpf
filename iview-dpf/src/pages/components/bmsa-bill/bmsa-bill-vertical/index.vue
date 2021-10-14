@@ -1,6 +1,6 @@
 <template>
     <div class="content-bill">
-        <bmsa-bill billName="project" :tabs="tabs" :mode="mode" active="two" @on-save="save" :isScroll="isScroll">
+        <bmsa-bill billName="project" :tabs="tabs" :mode="mode" active="one" @on-save="save" :isScroll="isScroll">
             <div slot="bill-title">
                 我是一个标题
             </div>
@@ -103,21 +103,12 @@
                     {name: 'four', title: '单据第四', icon: 'ios-construct'},
                     {name: 'five', title: '单据第五', icon: 'ios-construct'},
                     {name: 'liu', title: '单据第六', icon: 'ios-construct'},
-                    // {name: 'qi', title: '单据第七', icon: 'ios-construct'},
-                    // {name: 'ba', title: '单据第八', icon: 'ios-construct'},
-                    // {name: 'jiu', title: '单据第九', icon: 'ios-construct'},
-                    // {name: 'shi', title: '单据第十', icon: 'ios-construct'},
-                    // {name: 'shiyi', title: '单据第十一', icon: 'ios-construct'},
-                    // {name: 'shier', title: '单据第十二', icon: 'ios-construct'},
-                ],
-                tabs1: [
-                    {name: 'one', title: '单据第一', show: false, drop: true},
-                    {name: 'one1', title: '单据11', show: true, parentName: 'one'},
-                    {name: 'one2', title: '单据22', show: false, parentName: 'one'},
-                    {name: 'one3', title: '单据33', show: false, parentName: 'one'},
-                    {name: 'two', title: '单据第二个数字超长号哈哈', icon: 'ios-people'},
-                    {name: 'three', title: '单据第三', icon: 'ios-stats'},
-                    {name: 'four', title: '单据第四', icon: 'ios-construct'},
+                    {name: 'qi', title: '单据第七', icon: 'ios-construct'},
+                    {name: 'ba', title: '单据第八', icon: 'ios-construct'},
+                    {name: 'jiu', title: '单据第九', icon: 'ios-construct'},
+                    {name: 'shi', title: '单据第十', icon: 'ios-construct'},
+                    {name: 'shiyi', title: '单据第十一', icon: 'ios-construct'},
+                    {name: 'shier', title: '单据第十二', icon: 'ios-construct'},
                 ],
                 mode: 'right',
                 query: {
@@ -232,6 +223,6 @@
         }
     };
 </script>
-<style>
+<style lang="less" scoped>
 
 </style>

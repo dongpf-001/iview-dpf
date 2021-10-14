@@ -1,37 +1,111 @@
 <template>
-    <div class="bill-wrapper" >
-        <bmsa-bill billName="bill-template1" :tabs="tabs" active="one" :mode="mode" :isScroll="isScroll">
-            <div slot="one" ref="one" :style="isScroll ? 'height: 600px' : 'height: 100%'">
-                <span>水平单据</span>
+    <div class="content-bill">
+        <bmsa-bill billName="project" :tabs="tabs1" :mode="mode" active="two" @on-save="save" :isScroll="isScroll">
+            <div slot="bill-title">
+                我是一个标题
             </div>
-            <div slot="two" :style="isScroll ? 'height: 600px' : 'height: 100%'">
+            <div slot="one" ref="one" style="height:100%" :layData="layData">
+                <bingo-form :col="query.col" :labelWidth="query.labelWidth" :rules="rules" :data="data"
+                            @on-button-one="save" :button="query.button">
+                    <bingo-grid-item v-if="layData.status1.show">
+                        <FormItem :label="layData.status1.label" prop="status1" label-for="status1">
+                            <Input v-model="data.status1"/>
+                        </FormItem>
+                    </bingo-grid-item>
+                    <bingo-grid-item v-if="layData.status2.show">
+                        <FormItem :label="layData.status2.label" prop="status2" label-for="status2">
+                            <Input v-model="data.status2"/>
+                        </FormItem>
+                    </bingo-grid-item>
+                    <bingo-grid-item v-if="layData.status3.show">
+                        <FormItem :label="layData.status3.label" label-for="status3">
+                            <Input v-model="data.status3"/>
+                        </FormItem>
+                    </bingo-grid-item>
+                    <bingo-grid-item v-if="layData.status4.show">
+                        <FormItem :label="layData.status4.label" label-for="status4">
+                            <Input v-model="data.status4"/>
+                        </FormItem>
+                    </bingo-grid-item>
+                    <bingo-grid-item v-if="layData.status5.show">
+                        <FormItem :label="layData.status5.label" label-for="status5">
+                            <Input v-model="data.status5"/>
+                        </FormItem>
+                    </bingo-grid-item>
+                </bingo-form>
+            </div>
+            <div slot="one1" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                <Divider>详细描述</Divider>
+                <h3>props</h3>
+                <Table border :columns="columns1" :data="data1"></Table>
+            </div>
+            <div slot="one2" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                <Divider>详细描述aaa</Divider>
+                <h3>props</h3>
+                <Table border :columns="columns1" :data="data1"></Table>
+            </div>
+            <div slot="two" :style="isScroll ? 'height: 500px' : 'height: 100%'">
                 <bingo-tabs value="name1">
                     <TabPane label="标签一" name="name1">标签一的内容</TabPane>
                     <TabPane label="标签二" name="name2">标签二的内容</TabPane>
+                    <TabPane label="标签三" name="name3">标签三的内容</TabPane>
+                    <TabPane label="标签四" name="name4">标签四的内容</TabPane>
+                    <TabPane label="标签五" name="name5">标签五的内容</TabPane>
+                    <TabPane label="标签六" name="name6">标签六的内容</TabPane>
+                    <TabPane label="标签七" name="name7">标签七的内容</TabPane>
                 </bingo-tabs>
             </div>
-            <div slot="three" :style="isScroll ? 'height: 600px' : 'height: 100%'">
+            <div slot="three" :style="isScroll ? 'height: 500px' : 'height: 100%'">
                 ------------ three
             </div>
-            <template #footer>
-                <Button type="primary" >保存</Button>
-            </template>
+            <div slot="four" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                <svg aria-hidden="true" width="41px" height="41px" style="margin-top: -7px;margin-left: -3px;">
+                    <use xlink:href="#icondanjusvg3" width="100%"></use>
+                </svg>
+            </div>
+            <div slot="five" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ five
+            </div>
+            <div slot="liu" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 六
+            </div>
+            <div slot="qi" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 七
+            </div>
+            <div slot="ba" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 八
+            </div>
+            <div slot="jiu" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 九
+            </div>
+            <div slot="shi" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 十
+            </div>
+            <div slot="shiyi" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 十一
+            </div>
+            <div slot="shier" :style="isScroll ? 'height: 500px' : 'height: 100%'">
+                ------------ 十二
+            </div>
         </bmsa-bill>
     </div>
 </template>
 
 <script>
-    import bmsaBill from '@/components/bmsa-bill/index-other.vue';
     export default {
         data() {
             return {
-                isScroll: true, // 是否有滚动
-                tabs: [
-                    {name: 'one', title: '基本信息', showLayout: false},
-                    {name: 'two', title: '单据第二', icon: 'ios-people', hideTitleName: true},
-                    {name: 'three', title: '单据第三个数字超长号三个数字超长号', icon: 'ios-stats', hideTitle: true},
+                isScroll: false, // 是否有滚动
+                tabs1: [
+                    {name: 'one', title: '单据第一', show: false, drop: true},
+                    {name: 'one1', title: '单据11', show: true, parentName: 'one'},
+                    {name: 'one2', title: '单据22', show: false, parentName: 'one'},
+                    {name: 'one3', title: '单据33', show: false, parentName: 'one'},
+                    {name: 'two', title: '单据第二个数字超长号哈哈', icon: 'ios-people'},
+                    {name: 'three', title: '单据第三', icon: 'ios-stats'},
+                    {name: 'four', title: '单据第四', icon: 'ios-construct'},
                 ],
-                mode: 'right',
+                mode: 'top',
                 query: {
                     col: 3,
                     labelWidth: 90,
@@ -127,7 +201,7 @@
                 ],
             };
         },
-        components: {bmsaBill},
+        components: {},
         created() {
         },
         mounted() {
@@ -144,6 +218,6 @@
         }
     };
 </script>
-<style>
+<style lang="less" scoped>
 
 </style>
