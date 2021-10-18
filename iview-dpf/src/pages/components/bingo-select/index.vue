@@ -11,13 +11,14 @@
                                               :filterable="filterable" :label-in-value="labelInValue"
                                               @on-change="onChange" :showSelectAll="true">
                                 </bingo-select>
+                                {{model.model1}}
                             </FormItem>
                         </bingo-grid-item>
                         <bingo-grid-item>
                             <FormItem label="下拉多选" prop="model2" label-for="model2">
                                 <bingo-select ref="element" v-model="model.model2" :data="datas" :maxTagCount="maxTagCount"
                                               :multiple="multiple" :filterable="filterable" :showSelectAll="true"
-                                              :labelInValue="labelInValue" @on-change="onChange">
+                                              :labelInValue="labelInValue">
                                 </bingo-select>
                             </FormItem>
                         </bingo-grid-item>
@@ -93,7 +94,8 @@
                     }
                 ],
                 list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'],
-                data1: []
+                datas1: [],
+                rules: {}
             }
         },
         computed: {},
@@ -101,6 +103,13 @@
         mounted () {
         },
         methods: {
+            onChange (data) {
+                if (this.labelInValue) {
+                    this.$Message.info('键：' + data.value + '值：' + data.label);
+                } else {
+                    this.$Message.info(data);
+                }
+            },
             remoteMethod (query) {
                 if (query !== '') {
                     this.loading = true;

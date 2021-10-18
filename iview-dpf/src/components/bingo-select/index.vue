@@ -106,12 +106,6 @@
             }
         },
         methods: {
-            handleCreate (val) {
-                this.datas.push({
-                    value: val,
-                    label: val
-                });
-            },
             onChange (value) {
                 this.$emit('input', value);
                 this.$emit('on-change', value);
