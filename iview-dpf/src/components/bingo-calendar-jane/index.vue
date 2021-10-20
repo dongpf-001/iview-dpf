@@ -36,16 +36,13 @@
                 <!--本月-->
                 <!--如果不是本月  改变类名加灰色-->
                 <span v-if='dayobject.day.getMonth()+1 != currentMonth' class='other-month' @click="getDayTime(dayobject.day)">
-                    {{ dayobject.day.getDate()<10 ? '0'+dayobject.day.getDate() : dayobject.day.getDate() }}
+                    {{ showDate(dayobject.day) }}
                 </span>
                 <!--如果是本月  还需要判断是不是这一天-->
                 <span v-else>
-                    <!--今天  同年同月同日-->
-                    <span v-if='+dayobject.day == +selectDate' class='active' @click="getDayTime(dayobject.day)">
-                        {{ dayobject.day.getDate()<10 ? '0'+dayobject.day.getDate() : dayobject.day.getDate() }}
-                    </span>
-                    <span v-else @click="getDayTime(dayobject.day)">
-                        {{ dayobject.day.getDate()<10 ? '0'+dayobject.day.getDate() : dayobject.day.getDate() }}
+                    <!--选中的那天加上active样式-->
+                    <span :class="isActive(dayobject.day, selectDate) ? 'active' : ''" @click="getDayTime(dayobject.day)">
+                        {{ showDate(dayobject.day) }}
                     </span>
                     <div class="home-circle" :style="daily(dayobject) ? 'background-color:#F7B90A;' : 'background-color:#fff;'">
                     </div>
@@ -63,10 +60,25 @@
                 currentYear: 1970,
                 currentWeek: 1,
                 days: [],
-                selectDate: new Date(this.getDateStr(new Date) + ' 8:00:00'), // 当前日期
+                selectDate: new Date(), // 当前日期
             }
         },
         computed: {
+            showDate () { // 处理显示的日期
+                return function (date) {
+                    return date.getDate()<10 ? '0'+date.getDate() : date.getDate()
+                }
+            },
+            isActive () { // 判断当天是否选中
+                return function (date, selectDate) {
+                    let flag = false
+                    if (date.getFullYear() == selectDate.getFullYear() && date.getMonth() == selectDate.getMonth() &&
+                        date.getDate() == selectDate.getDate()) {
+                        flag = true
+                    }
+                    return flag
+                }
+            },
             daily () { // 判断是否存在日报
                 return function(obj){
                     if (obj.day.getDate() == 15 || obj.day.getDate() == 16) {
@@ -77,7 +89,7 @@
         },
         methods: {
             // 初始化当前日期页面
-            initData (cur) {
+            initDate (cur) {
                 let date
                 if (cur) {
                     date = new Date(cur)
@@ -107,7 +119,7 @@
                     d2.setDate(d2.getDate() - i)
                     let dayobjectSelf = {} // 用一个对象包装Date对象  以便为以后预定功能添加属性
                     dayobjectSelf.day = d2
-                    this.days.push(dayobjectSelf) // 将日期放入data 中的days数组 供页面渲染使用
+                    this.days.push(dayobjectSelf) // 将日期放入date 中的days数组 供页面渲染使用
                 }
                 // 其他周
                 for (let j = 1; j <= 35 - this.currentWeek; j++) {
@@ -132,13 +144,13 @@
                 // setDate(dx) 参数dx为 上月最后一天的前后dx天
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(0)
-                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+                this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
             // 切换下一月
             pickNext (year, month) {
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(35)
-                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+                this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
             // 根据年月日返回类似 2016-01-02 格式的字符串
             formatDate (year, month, day) {
@@ -162,14 +174,14 @@
                 this.currentMonth = date.getMonth() + 1
                 // 重置年月
                 let d = new Date(this.formatDate(this.currentYear, this.currentMonth, 1))
-                this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+                this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
                 // 重置当前日
-                this.selectDate = new Date(this.getDateStr(new Date) + ' 8:00:00')
+                this.selectDate = new Date()
             }
         },
         created () {
             // 在vue初始化时调用
-            this.initData(null)
+            this.initDate(null)
         },
     }
 </script>
