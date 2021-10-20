@@ -29,6 +29,7 @@ import bingoPart from './bingo-part';
 import bingoQuill from './bingo-quill';
 import bingoDateWeek from './bingo-date-week/index.vue';
 import bingoCalendar from './bingo-calendar';
+import bingoCalendarJane from './bingo-calendar-jane';
 import bingoDragList from './bingo-drag-list';
 
 const components = {
@@ -63,6 +64,7 @@ const components = {
     bingoQuill,
     bingoDateWeek,
     bingoCalendar,
+    bingoCalendarJane,
     bingoDragList,
 }
 const install = Vue => {

@@ -257,6 +257,16 @@ export default {
             component: () => import('@/pages/components/bingo-calendar')
         },
         {
+            path: 'bingo-calendar-jane',
+            name: `${oldpre}calendar-jane`,
+            meta: {
+                ...meta,
+                title: '日历简版',
+                closable: true
+            },
+            component: () => import('@/pages/components/bingo-calendar-jane')
+        },
+        {
             path: 'bingo-drag-list',
             name: `${oldpre}drag-list`,
             meta: {

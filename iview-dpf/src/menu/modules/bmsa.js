@@ -65,6 +65,10 @@ export default {
                     title: '大众周日历'
                 },
                 {
+                    path: `${pre}bingo-calendar-jane`,
+                    title: '日历简版'
+                },
+                {
                     path: `${pre}bmsa-input-part`,
                     title: '零件号组件'
                 },
