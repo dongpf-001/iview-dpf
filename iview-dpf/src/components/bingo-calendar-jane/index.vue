@@ -8,14 +8,14 @@
                     <span class="title">日历</span>
                 </li>
                 <li class='year-month'>
-                    <Tooltip content="重置">
-                        <Icon type="md-refresh" class="arrow-icon" @click="resetDate" style="margin-right: 8px;margin-top: 4px"/>
-                    </Tooltip>
-                    <Icon type="ios-arrow-dropleft" class="arrow-icon" @click='handlePickPre(currentYear,currentMonth)'/>
-                    <span class='choose-year'>
-                        {{ currentYear }}-{{ currentMonth<10 ? '0'+currentMonth : currentMonth }}
+                    <span v-if="showReset(currentYear, currentMonth)" class="arrow-text" @click="resetDate">
+                        回到今天
                     </span>
-                    <Icon type="ios-arrow-dropright" class="arrow-icon" @click='handlePickNext(currentYear,currentMonth)'/>
+                    <Icon type="ios-arrow-dropleft" class="arrow-icon" @click='handlePickPre(currentYear, currentMonth)'/>
+                    <span class='choose-year'>
+                        {{showMonth(currentYear, currentMonth)}}
+                    </span>
+                    <Icon type="ios-arrow-dropright" class="arrow-icon" @click='handlePickNext(currentYear, currentMonth)'/>
                 </li>
             </ul>
         </div>
@@ -41,7 +41,7 @@
                 <!--如果是本月  还需要判断是不是这一天-->
                 <span v-else>
                     <!--选中的那天加上active样式-->
-                    <span :class="isActive(dayobject.day, selectDate) ? 'active' : ''" @click="getDayTime(dayobject.day)">
+                    <span :class="isActive(dayobject.day, model) ? 'active' : ''" @click="getDayTime(dayobject.day)">
                         {{ showDate(dayobject.day) }}
                     </span>
                     <div class="home-circle" :style="daily(dayobject) ? 'background-color:#F7B90A;' : 'background-color:#fff;'">
@@ -60,10 +60,40 @@
                 currentYear: 1970,
                 currentWeek: 1,
                 days: [],
-                selectDate: new Date(), // 当前日期
             }
         },
+        props: {
+            value: { // 双向绑定
+                type: [String, Date],
+                default: new Date()
+            },
+        },
         computed: {
+            model: { // 双向绑定，可接受日期类型或者字符串类型
+                get: function () {
+                    return new Date(this.value)
+                },
+                set: function (value) {
+                    this.$emit('input', value);
+                },
+            },
+            // 是否显示回到今天
+            showReset () {
+                return function (year, month) {
+                    let nowDate = new Date()
+                    let nowYear = nowDate.getFullYear()
+                    let nowMonth = nowDate.getMonth() + 1
+                    let now = new Date(this.getDateStr(new Date())) // 当前日期
+                    let date = new Date(this.getDateStr(this.model)) // 选中的日期
+                    return !(+now == +date) || nowYear != year || nowMonth != month
+                }
+            },
+            showMonth () { // 处理显示的月份
+                return function (year, month) {
+                    let monthStr = year + '-' + (month < 10  ?  '0'+month : month)
+                    return monthStr
+                }
+            },
             showDate () { // 处理显示的日期
                 return function (date) {
                     return date.getDate()<10 ? '0'+date.getDate() : date.getDate()
@@ -134,8 +164,8 @@
             getDayTime (el) {
                 // 当前选中的日期 其他月份的日期不可以选中
                 if (el.getMonth()+1 != this.currentMonth) return
-                this.selectDate = el
-                this.$emit('on-change', this.selectDate, this.getDateStr(this.selectDate))
+                this.model = el
+                this.$emit('on-change', el, this.getDateStr(el))
             },
             // 切换上一月
             handlePickPre (year, month) {
@@ -145,12 +175,16 @@
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(0)
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+                let pdate = d.getFullYear()+'-'+((d.getMonth()+1)<10 ? '0' + (d.getMonth()+1) : (d.getMonth()+1))
+                this.$emit('on-change-month', d, pdate)
             },
             // 切换下一月
             handlePickNext (year, month) {
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(35)
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+                let pdate = d.getFullYear()+'-'+((d.getMonth()+1)<10 ? '0' + (d.getMonth()+1) : (d.getMonth()+1))
+                this.$emit('on-change-month', d, pdate)
             },
             // 根据年月日返回类似 2016-01-02 格式的字符串
             formatDate (year, month, day) {
@@ -167,7 +201,7 @@
                     ((date.getDate()<10 ? '0'+date.getDate() : date.getDate()));   //把日期格式转换成字符串
                 return pdate
             },
-            // 重置当前时间
+            // 回到今天
             resetDate () {
                 let date = new Date()
                 this.currentYear = date.getFullYear()
@@ -176,8 +210,8 @@
                 let d = new Date(this.formatDate(this.currentYear, this.currentMonth, 1))
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
                 // 重置当前日
-                this.selectDate = new Date()
-                this.$emit('on-reset', this.selectDate, this.getDateStr(this.selectDate))
+                this.model = new Date()
+                this.$emit('on-reset', new Date(), this.getDateStr(new Date()))
             }
         },
         created () {
@@ -226,14 +260,21 @@
         align-items: center;
         justify-content: space-around;
     }
+    .arrow-text {
+        cursor:pointer;
+        margin: 3px 8px 0 0;
+        font-size: 12px;
+        &:hover {
+            color: #e1e1e1;
+        }
+    }
     .arrow-icon {
         cursor:pointer;
         font-size: 18px;
+        &:hover {
+            color: #e1e1e1;
+        }
     }
-    .arrow-icon:hover {
-        color: #e1e1e1;
-    }
-    
     .home-month ul li {
         font-size: 16px;
         color: #fff;
