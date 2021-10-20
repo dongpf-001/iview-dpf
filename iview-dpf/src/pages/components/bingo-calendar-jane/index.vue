@@ -4,7 +4,7 @@
             <Split v-model="split1">
                 <div slot="left" class="demo-split-pane">
                     <div style="width: 500px;height: 350px">
-                        <bingo-calendar-jane></bingo-calendar-jane>
+                        <bingo-calendar-jane @on-change="handleChange"></bingo-calendar-jane>
                     </div>
                 </div>
                 <div slot="right" class="demo-split-pane">
@@ -32,8 +32,9 @@
         mounted () {
         },
         methods: {
-            onChange (date, week) {
-                this.$BMessage.success('选择的日期是：'+date.toString()+';对应的大众周是'+week);
+            // 切换日期
+            handleChange (date, dateStr) {
+                this.$BMessage.success('选择的日期是：'+dateStr);
             },
             onTypeChange (type) {
                 this.$BMessage.success(type);

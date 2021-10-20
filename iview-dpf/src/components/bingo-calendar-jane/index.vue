@@ -63,7 +63,7 @@
                 currentYear: 1970,
                 currentWeek: 1,
                 days: [],
-                selectDate: new Date(), // 当前日期
+                selectDate: new Date(this.getDateStr(new Date) + ' 8:00:00'), // 当前日期
             }
         },
         computed: {
@@ -75,13 +75,9 @@
                 }
             }
         },
-        created () {
-            // 在vue初始化时调用
-            this.initData(null)
-        },
         methods: {
+            // 初始化当前日期页面
             initData (cur) {
-                // let leftcount = 0 // 存放剩余数量
                 let date
                 if (cur) {
                     date = new Date(cur)
@@ -122,11 +118,14 @@
                     this.days.push(dayobjectOther)
                 }
             },
+            // 点击选中的日期， 返回的参数是日期和日期字符串
             getDayTime (el) {
                 // 当前选中的日期 其他月份的日期不可以选中
                 if (el.getMonth()+1 != this.currentMonth) return
                 this.selectDate = el
+                this.$emit('on-change', this.selectDate, this.formatDate(el.getFullYear(), (el.getMonth()+1), el.getDate()))
             },
+            // 切换上一月
             pickPre (year, month) {
                 // setDate(0); 上月最后一天
                 // setDate(-1); 上月倒数第二天
@@ -135,12 +134,13 @@
                 d.setDate(0)
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
+            // 切换下一月
             pickNext (year, month) {
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(35)
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
-            // 返回 类似 2016-01-02 格式的字符串
+            // 根据年月日返回类似 2016-01-02 格式的字符串
             formatDate (year, month, day) {
                 let y = year
                 let m = month
@@ -148,6 +148,12 @@
                 let d = day
                 if (d < 10) d = '0' + d
                 return y + '-' + m + '-' + d
+            },
+            // 根据日期返回类似 2016-01-02 格式的字符串
+            getDateStr (date) {
+                let pdate = date.getFullYear()+'-'+((date.getMonth()+1)<10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1))+'-'+
+                    ((date.getDate()<10 ? '0'+date.getDate() : date.getDate()));   //把日期格式转换成字符串
+                return pdate
             },
             // 重置当前时间
             resetDate () {
@@ -158,9 +164,13 @@
                 let d = new Date(this.formatDate(this.currentYear, this.currentMonth, 1))
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
                 // 重置当前日
-                this.selectDate = new Date()
+                this.selectDate = new Date(this.getDateStr(new Date) + ' 8:00:00')
             }
-        }
+        },
+        created () {
+            // 在vue初始化时调用
+            this.initData(null)
+        },
     }
 </script>
 <style lang="less" scoped>
@@ -173,10 +183,18 @@
         /*0 1px 5px 0 rgba(0, 0, 0, 0.12);*/
     }
     .home-month {
+        height: 45px;
         width: 100%;
         color: #333333;
         background: url('./rl.jpg');
         background-size:cover;
+        ul {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
+        }
     }
     .month-title {
         margin-left: 18px;
@@ -188,13 +206,6 @@
         font-size: 16px;
         font-weight: bold;
         margin-left: 8px
-    }
-    .home-month ul {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: space-between;
-        height: 60px;
     }
     .year-month {
         margin-right: 18px;
