@@ -369,7 +369,7 @@
                     this.$nextTick(() => {
                         this.$ScrollTop(this.$refs.content, {
                             // to: this.$refs[ref][0].$el.offsetTop,
-                            to: this.$refs[ref][0].$el.offsetTop - 10, // @liuhzhbj 目的：垂直回滚tab标签，使其定位到原点
+                            to: this.$refs[ref][0].$el.offsetTop - 10, // 目的：垂直回滚tab标签，使其定位到原点
                             time: 600
                         })
                     });
