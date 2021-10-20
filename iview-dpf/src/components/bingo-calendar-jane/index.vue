@@ -11,11 +11,11 @@
                     <Tooltip content="重置">
                         <Icon type="md-refresh" class="arrow-icon" @click="resetDate" style="margin-right: 8px;margin-top: 4px"/>
                     </Tooltip>
-                    <Icon type="ios-arrow-dropleft" class="arrow-icon" @click='pickPre(currentYear,currentMonth)'/>
+                    <Icon type="ios-arrow-dropleft" class="arrow-icon" @click='handlePickPre(currentYear,currentMonth)'/>
                     <span class='choose-year'>
                         {{ currentYear }}-{{ currentMonth<10 ? '0'+currentMonth : currentMonth }}
                     </span>
-                    <Icon type="ios-arrow-dropright" class="arrow-icon" @click='pickNext(currentYear,currentMonth)'/>
+                    <Icon type="ios-arrow-dropright" class="arrow-icon" @click='handlePickNext(currentYear,currentMonth)'/>
                 </li>
             </ul>
         </div>
@@ -135,10 +135,10 @@
                 // 当前选中的日期 其他月份的日期不可以选中
                 if (el.getMonth()+1 != this.currentMonth) return
                 this.selectDate = el
-                this.$emit('on-change', this.selectDate, this.formatDate(el.getFullYear(), (el.getMonth()+1), el.getDate()))
+                this.$emit('on-change', this.selectDate, this.getDateStr(this.selectDate))
             },
             // 切换上一月
-            pickPre (year, month) {
+            handlePickPre (year, month) {
                 // setDate(0); 上月最后一天
                 // setDate(-1); 上月倒数第二天
                 // setDate(dx) 参数dx为 上月最后一天的前后dx天
@@ -147,7 +147,7 @@
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
             // 切换下一月
-            pickNext (year, month) {
+            handlePickNext (year, month) {
                 let d = new Date(this.formatDate(year, month, 1))
                 d.setDate(35)
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
@@ -177,6 +177,7 @@
                 this.initDate(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
                 // 重置当前日
                 this.selectDate = new Date()
+                this.$emit('on-reset', this.selectDate, this.getDateStr(this.selectDate))
             }
         },
         created () {
@@ -191,8 +192,8 @@
         font-size: 12px;
         width: 100%;
         margin: 0 auto;
-        /*box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.1),*/
-        /*0 1px 5px 0 rgba(0, 0, 0, 0.12);*/
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.1),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
     }
     .home-month {
         height: 45px;
