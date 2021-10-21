@@ -91,7 +91,7 @@
             },
             showImport: { // 是否显示导入
                 type: Boolean,
-                default: false
+                default: true
             },
             showPrint: { // 是否显示打印
                 type: Boolean,

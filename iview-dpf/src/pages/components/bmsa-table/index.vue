@@ -9,7 +9,7 @@
                     </bingo-form-item>
                 </bingo-grid-item>
             </bingo-query>
-            <bmsa-table-tool class="bmsa-query-height">
+            <bmsa-table-tool class="bmsa-query-height" @on-refresh="handleRefresh">
                 <!--左侧自定义按钮-->
                 <template #left-buttons>
                     <Button type="primary" customIcon="iconfont iconxinjian">{{ $t('page.common.new') }}</Button>
@@ -36,6 +36,10 @@
                                     <Button size="small">
                                         <Icon type="ios-alert-outline" />
                                         <span class="font">自定义1</span>
+                                    </Button>
+                                    <Button size="small">
+                                        <Icon type="ios-alert-outline" />
+                                        <span class="font">自定义2</span>
                                     </Button>
                                 </Dropdown-menu>
                             </template>
@@ -94,6 +98,7 @@
         methods: {
             // 查询
             handleGetData () {
+                this.gridOptions.loading = true
                 let params = {
                     pageNum: 1,
                     pageSize: 10
@@ -103,7 +108,12 @@
                     this.$set(this.gridOptions.data[3], 'hideEdit', true) // 该数据隐藏编辑按钮
                     this.$set(this.gridOptions.data[4], 'hideDelete', true) // 该数据隐藏删除按钮
                     this.$set(this.gridOptions.data[5], 'hideMore', true) // 该数据隐藏更多按钮
+                    this.gridOptions.loading = false
                 })
+            },
+            // 刷新
+            handleRefresh () {
+                this.handleGetData()
             },
             // 重置
             handleReset () {
