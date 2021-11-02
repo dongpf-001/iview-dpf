@@ -66,6 +66,24 @@ export default {
                 title: '不规则页面布局'
             },
             component: () => import('@/pages/demo/demo-page-layout')
+        },
+        {
+            path: 'demo-audio',
+            name: 'demo-audio',
+            meta: {
+                ...meta,
+                title: '动态语音播报'
+            },
+            component: () => import('@/pages/demo/demo-audio')
+        },
+        {
+            path: 'demo-carousel',
+            name: 'demo-carousel',
+            meta: {
+                ...meta,
+                title: '动态构造轮播'
+            },
+            component: () => import('@/pages/demo/demo-carousel')
         }
     ]
 };

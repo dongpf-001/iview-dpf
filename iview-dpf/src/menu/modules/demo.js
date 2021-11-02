@@ -29,5 +29,13 @@ export default {
             path: `${pre}demo-page-layout`,
             title: '不规则页面布局'
         },
+        {
+            path: `${pre}demo-audio`,
+            title: '动态语音播报'
+        },
+        {
+            path: `${pre}demo-carousel`,
+            title: '动态构造轮播'
+        },
     ]
 }

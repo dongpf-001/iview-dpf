@@ -14,6 +14,13 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 Vue.use(VXETable)
 
+// 语音播报
+import APlayer from '@moefe/vue-aplayer';
+Vue.use(APlayer, {
+    defaultCover: 'https://github.com/u3u.png',
+    productionTip: true,
+});
+
 // 配置
 import Setting from './setting';
 
