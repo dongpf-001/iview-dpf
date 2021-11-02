@@ -3,11 +3,11 @@
         <Card>
             <Button @click="onClick">添加</Button>
             {{num}}
-            <Carousel loop style="height: 100%">
+            <Carousel autoplay :autoplay-speed="2000" style="height: 100%">
                 <CarouselItem v-for="pageNum in Math.ceil(num/((24/8)*2))" style="height: 100%">
-                    <div v-for="item in getShowData(num, pageNum-1)" style="width: 50px;height: 50px">
+                    <i-col v-for="item in getShowData(num, pageNum-1)" span="8" style="background-color: lightpink">
                         {{item}}
-                    </div>
+                    </i-col>
                 </CarouselItem>
             </Carousel>
         </Card>
