@@ -84,6 +84,15 @@ export default {
                 title: '动态构造轮播'
             },
             component: () => import('@/pages/demo/demo-carousel')
+        },
+        {
+            path: 'demo-chorm',
+            name: 'demo-chorm',
+            meta: {
+                ...meta,
+                title: '浏览器降频问题'
+            },
+            component: () => import('@/pages/demo/demo-chorm')
         }
     ]
 };

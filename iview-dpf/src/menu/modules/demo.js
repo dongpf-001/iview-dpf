@@ -37,5 +37,9 @@ export default {
             path: `${pre}demo-carousel`,
             title: '动态构造轮播'
         },
+        {
+            path: `${pre}demo-chorm`,
+            title: '浏览器降频问题'
+        },
     ]
 }

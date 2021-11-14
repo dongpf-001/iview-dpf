@@ -8,6 +8,10 @@ import App from './App';
 import allComponents from '@/components';
 Vue.use(allComponents)
 
+// worker
+import VueWorker from 'vue-worker'
+Vue.use(VueWorker)
+
 // vxe-table
 import 'xe-utils'
 import VXETable from 'vxe-table'

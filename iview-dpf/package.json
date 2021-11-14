@@ -40,8 +40,10 @@
     "vue-i18n": "^7.8.1",
     "vue-proportion-directive": "^1.1.0",
     "vue-router": "^3.1.3",
+    "vue-worker": "^1.2.1",
     "vuex": "^3.0.1",
     "vxe-table": "^3.2.14",
+    "worker-interval": "^1.0.6",
     "xe-utils": "^3.1.13"
   },
   "devDependencies": {
